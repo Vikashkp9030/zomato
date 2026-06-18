@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/vikashkp9030/zomato/shared/pb";
+
+// User Service Messages
+message User {
+  string id = 1;
+  string email = 2;
+  string phone = 3;
+  string first_name = 4;
+  string last_name = 5;
+  string role = 6;
+  string status = 7;
+  int64 created_at = 8;
+}
+
+message RegisterRequest {
+  string email = 1;
+  string phone = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string password = 5;
+  string role = 6;
+}
+
+message RegisterResponse {
+  User user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  User user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  string user_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string phone = 4;
+}
+
+message UpdateUserResponse {
+  User user = 1;
+}
+
+// User Service RPC
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+}
