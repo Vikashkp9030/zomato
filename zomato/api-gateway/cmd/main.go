@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
@@ -166,5 +167,3 @@ func main() {
 	logger.Info("API Gateway starting", "port", port)
 	router.Run(fmt.Sprintf(":%s", port))
 }
-
-import "net/http"

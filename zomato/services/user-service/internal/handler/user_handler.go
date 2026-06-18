@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/vikashkp9030/zomato/services/user-service/internal/domain"
 	"github.com/vikashkp9030/zomato/services/user-service/internal/usecase"
 	"github.com/vikashkp9030/zomato/shared/pkg/auth"
@@ -250,7 +249,7 @@ func (h *UserHandler) DeleteAddress(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	addressID := c.Param("id")
 
-	err := h.usecase.DeleteAddress(c.Request.Context(), userID, addressID)
+	err := h.usecase.DeleteAddress(c.Request.Context(), userID.(string), addressID)
 	if err != nil {
 		if ce, ok := errors.IsCustomError(err); ok {
 			c.JSON(ce.GetStatusCode(), gin.H{"error": ce.Message})

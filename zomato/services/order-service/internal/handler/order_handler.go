@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/vikashkp9030/zomato/services/order-service/internal/usecase"
@@ -220,7 +219,6 @@ func (h *OrderHandler) RemoveFromCart(c *gin.Context) {
 }
 
 func (h *OrderHandler) ClearCart(c *gin.Context) {
-	userID, _ := c.Get("user_id")
 	cartID := c.Query("cart_id")
 
 	err := h.usecase.ClearCart(c.Request.Context(), cartID)

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/vikashkp9030/zomato/services/delivery-service/internal/usecase"
@@ -118,7 +117,6 @@ func (h *DeliveryHandler) GetPartnerEarnings(c *gin.Context) {
 
 func (h *DeliveryHandler) GetPartnerOrders(c *gin.Context) {
 	userID, _ := c.Get("user_id")
-	statusFilter := c.DefaultQuery("status", "")
 
 	orders, err := h.usecase.GetPartnerOrders(c.Request.Context(), userID.(string))
 	if err != nil {
