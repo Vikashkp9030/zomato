@@ -1,0 +1,30 @@
+package main
+import "fmt"
+
+type Employee struct{
+	Name string
+	Age  int
+}
+
+func main(){
+	//PascleCase
+	//Eg. HelloWorld, Hello, World, etc.
+
+	//camelCase
+	//Eg. helloWorld, hello, world, etc.
+
+	//snake_case
+	//Eg. hello_world, hello, world, etc.
+
+	//kebab-case
+	//Eg. hello-world, hello, world, etc.
+
+	//UPPERCASE
+	//Eg. HELLO_WORLD, HELLO, WORLD, etc.
+
+	//Constants
+
+	const MAXRETIREMENTAGE = 65
+
+	fmt.Println("Naming Conventions in Go")
+}

@@ -1,0 +1,57 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+type RateLimiter struct {
+	token      chan struct{}
+	refillTime time.Duration
+}
+
+func NewRateLimiter(rateLimit int, refillTime time.Duration) *RateLimiter {
+	token := make(chan struct{}, rateLimit)
+	r := &RateLimiter{
+		token:      token,
+		refillTime: refillTime,
+	}
+	for range rateLimit {
+		token <- struct{}{}
+	}
+	return r
+}
+
+func (r *RateLimiter) StartFilling() {
+	ticker := time.NewTicker(r.refillTime)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			select {
+			case r.token <- struct{}{}:
+			default:
+			}
+		}
+	}
+
+}
+func (r *RateLimiter) Allow() bool {
+	select {
+	case <-r.token:
+		return true
+	default:
+		return false
+	}
+}
+func main() {
+	RateLimiter := NewRateLimiter(5, time.Second)
+	for range 10 {
+		if RateLimiter.Allow() {
+			fmt.Println("Allowed")
+		} else {
+			fmt.Println("Not Allowed")
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+}

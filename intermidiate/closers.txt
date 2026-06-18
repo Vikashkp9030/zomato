@@ -1,0 +1,29 @@
+package main
+
+import "fmt"
+
+func main() {
+	a := adder()
+	fmt.Println(a())
+	fmt.Println(a())
+	fmt.Println(a())
+	fmt.Println(a())
+
+	a1 := adder()
+
+	fmt.Println(a1())
+	fmt.Println(a1())
+	fmt.Println()
+
+}
+
+func adder() func() int {
+	i := 0
+	fmt.Println("i is ", i)
+	return func() int {
+		i++
+		fmt.Println("add 1 to i, i is now ", i)
+		return i
+
+	}
+}

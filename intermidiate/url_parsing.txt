@@ -1,0 +1,62 @@
+package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	rawUrl := "https://www.example.com:8000/path/to/resource?query=param#fragment"
+
+	parseUrl, err := url.Parse(rawUrl)
+	if err != nil {
+		fmt.Println("Error parsing URL:", err)
+		return
+	}
+	fmt.Println("Scheme:", parseUrl.Scheme)
+	fmt.Println("Host:", parseUrl.Host)
+	fmt.Println("Path:", parseUrl.Path)
+	fmt.Println("RawQuery:", parseUrl.RawQuery)
+	fmt.Println("Fragment:", parseUrl.Fragment)
+
+	rawUrl1 := "https://www.example.com/path?name=Vikash&age=30"
+	parseUrl1, err := url.Parse(rawUrl1)
+	if err != nil {
+		fmt.Println("Error parsing URL1:", err)
+		return
+	}
+	fmt.Println("Scheme:", parseUrl1.Scheme)
+	fmt.Println("Host:", parseUrl1.Host)
+	fmt.Println("Path:", parseUrl1.Path)
+	fmt.Println("RawQuery:", parseUrl1.RawQuery)
+	fmt.Println("Fragment:", parseUrl1.Fragment)
+	queryParams := parseUrl1.Query()
+	fmt.Println("Query Parameters:")
+	for key, values := range queryParams {
+		for _, value := range values {
+			fmt.Printf("%s: %s\n", key, value)
+		}
+	}
+
+	// building base url
+	baseUrl := &url.URL{
+		Scheme: "https",
+		Host:   "example.com",
+		Path:   "/path",
+	}
+	query := baseUrl.Query()
+	query.Set("name", "Vikash")
+	query.Set("age", "30")
+	baseUrl.RawQuery = query.Encode()
+	fmt.Println("Constructed URL:", baseUrl.String())
+
+	values := url.Values{}
+	values.Add("name", "Vikash")
+	values.Add("age", "30")
+	encodedQuery := values.Encode()
+	fmt.Println("Encoded Query String:", encodedQuery)
+
+	baseUrl2 := "https://example.com/path"
+	fullUrl := baseUrl2 + "?" + encodedQuery
+	fmt.Println("Full URL:", fullUrl)
+}

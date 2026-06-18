@@ -1,0 +1,49 @@
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Geometry interface {
+	area() float64
+	perimeter() float64
+}
+type rectangle struct {
+	height, width float64
+}
+type circle struct {
+	radiud float64
+}
+
+func (r rectangle) area() float64 {
+	return r.height * r.width
+}
+func (r circle) area() float64 {
+	return math.Pi * r.radiud * r.radiud
+}
+
+func (r rectangle) perimeter() float64 {
+	return 2 * (r.height + r.width)
+}
+func (r circle) perimeter() float64 {
+	return 2 * math.Pi * r.radiud
+}
+func (r circle) diameter() float64 {
+	return 2 * r.radiud
+}
+
+func messure(g Geometry) {
+	fmt.Println(g)
+	fmt.Println("Area:", g.area())
+	fmt.Println("Perimeter:", g.perimeter())
+}
+
+func main() {
+	r := rectangle{height: 10, width: 6}
+	c := circle{radiud: 5}
+
+	messure(r)
+	messure(c)
+
+}

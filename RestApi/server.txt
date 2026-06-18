@@ -1,0 +1,47 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+)
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+var personData = map[string]Person{
+	"1": Person{Name: "John Doe", Age: 30},
+	"2": Person{Name: "Jane Smith", Age: 25},
+	"3": Person{Name: "Vikash", Age: 27},
+}
+
+func getPersonHandler(res http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		http.Error(res, "Missing id parameter", http.StatusBadRequest)
+		return
+	}
+	person, exists := personData[id]
+	if !exists {
+		http.Error(res, "Person not found", http.StatusNotFound)
+		return
+	}
+	res.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(res).Encode(person); err != nil {
+		http.Error(res, "Error encoding response", http.StatusInternalServerError)
+	}
+}
+
+func main() {
+
+	port := 8080
+	fmt.Printf("Server started on Port %d\n", port)
+
+	http.HandleFunc("/person", getPersonHandler)
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+
+}

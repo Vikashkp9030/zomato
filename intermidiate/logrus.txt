@@ -1,0 +1,27 @@
+package main
+
+import (
+	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
+)
+
+func main() {
+	logrus.Println("This is a log message")
+	log := logrus.New()
+	log.SetLevel(logrus.InfoLevel)
+	log.Info("This is an info message")
+	log.Warn("This is a warning message")
+	log.Error("This is an error message")
+	log.WithFields(logrus.Fields{
+		"key": "value",
+	}).Info("This is an info message with fields")
+
+	logger, err := zap.NewProduction()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer logger.Sync()
+	logger.Info("This is a log message from zap logger")
+	logger.Info("User logged in", zap.String("User name", "Vikash"))
+
+}

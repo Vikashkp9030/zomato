@@ -1,0 +1,42 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+	"sync/atomic"
+)
+
+type AtomicCounter struct {
+	value int64
+}
+
+func (c *AtomicCounter) Increment() {
+	atomic.AddInt64(&c.value, 1)
+}
+
+func (c *AtomicCounter) GetValue() int64 {
+	return atomic.LoadInt64(&c.value)
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	numGoroutines := 10
+	counter := &AtomicCounter{}
+
+	wg.Add(numGoroutines)
+
+	for i := 0; i < numGoroutines; i++ {
+		go func() {
+			defer wg.Done()
+
+			for j := 0; j < 1000; j++ {
+				counter.Increment()
+			}
+		}()
+	}
+
+	wg.Wait()
+
+	fmt.Println(counter.GetValue())
+}

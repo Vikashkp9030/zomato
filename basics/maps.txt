@@ -1,0 +1,22 @@
+package main
+
+import "fmt"
+
+func main() {
+	map1 := make(map[string]int)
+	map1["a"] = 1
+	map1["b"] = 2
+	map1["c"] = 3
+
+	fmt.Println(map1)
+	fmt.Println(map1["a"])
+	delete(map1, "a")
+	fmt.Println(map1)
+	// clear(map1)
+	// fmt.Println(map1)
+	_, status := map1["b"]
+	fmt.Println(status)
+	for key, value := range map1 {
+		fmt.Println(key, value)
+	}
+}

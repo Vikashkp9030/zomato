@@ -1,0 +1,31 @@
+package main
+
+import (
+	"fmt"
+)
+
+type Person struct {
+	name string
+	age  int
+}
+
+func main() {
+	p1 := Person{
+		name: "Vikash",
+		age:  30,
+	}
+	fmt.Println(p1.name)
+	user := struct {
+		name  string
+		email string
+	}{
+		name:  "Neetu",
+		email: "vikash798561@gmail.com",
+	}
+	fmt.Println(user.name)
+	fmt.Println(user.email)
+	fmt.Println(p1.PrintInfo())
+}
+func (p Person) PrintInfo() string {
+	return fmt.Sprintf("Name: %s, Age: %d", p.name, p.age)
+}

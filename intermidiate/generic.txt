@@ -1,0 +1,49 @@
+package main
+
+import "fmt"
+
+type Stack[T any] struct {
+	items []T
+}
+
+func (s *Stack[T]) push(item T) {
+	s.items = append(s.items, item)
+}
+
+func (s *Stack[T]) pop() (T, bool) {
+	if len(s.items) == 0 {
+		var Zero T
+		return Zero, false
+	}
+	item := s.items[len(s.items)-1]
+	s.items = s.items[:len(s.items)-1]
+	return item, true
+}
+func (s *Stack[T]) isEmpty() bool {
+	return len(s.items) == 0
+}
+func (s *Stack[T]) printAll() {
+	for _, item := range s.items {
+		fmt.Println(item)
+	}
+}
+
+func main() {
+
+	a, b := 4, 5
+	a, b = swap(a, b)
+	fmt.Println(a, b)
+
+	x, y := "hello, world", "golang"
+	x, y = swap(x, y)
+	fmt.Println(x, y)
+
+	s := Stack[int]{}
+	s.push(5)
+	s.push(10)
+	s.printAll()
+}
+
+func swap[T any](a, b T) (T, T) {
+	return b, a
+}

@@ -1,0 +1,91 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"html/template"
+	"os"
+	"strings"
+)
+
+func main() {
+	// temp1 := template.New("example")
+	// temp1, error := template.New("example").Parse("Welcome, {{.name}}! How are you doing?")
+	// if error != nil {
+	// 	panic(error)
+	// }
+	// temp1 := template.Must(template.New("example").Parse("Welcome, {{.name}}! How are you doing?"))
+	// data := map[string]interface{}{
+	// 	"name": "Vikash",
+	// }
+	// error := temp1.ExecuteTemplate(os.Stdout, "example", data)
+	// if error != nil {
+	// 	panic(error)
+	// }
+
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Enter your name:")
+	name, _ := reader.ReadString('\n')
+	name = strings.TrimSpace(name)
+
+	templates := map[string]string{
+		"welcome":      "Welcome, {{.name}}! How are you doing?",
+		"notification": "{{.name}}, you have a new notification: {{.notification}}",
+		"error":        "Oops! An error occurred: {{.errorMessage}}",
+	}
+	parsedTemplates := make(map[string]*template.Template)
+	for key, temp := range templates {
+		parsedTemplates[key] = template.Must(template.New(key).Parse(temp))
+	}
+
+	for {
+		fmt.Println("\n menu:")
+		fmt.Println("1. Welcome")
+		fmt.Println("2. Notification")
+		fmt.Println("3. Error")
+		fmt.Print("Choose an option: ")
+		option, _ := reader.ReadString('\n')
+		option = strings.TrimSpace(option)
+		var data map[string]interface{}
+		var temp1 *template.Template
+
+		switch option {
+		case "1":
+			temp1 = parsedTemplates["welcome"]
+			data = map[string]interface{}{
+				"name": name,
+			}
+		case "2":
+			fmt.Println("Enter your notification message:")
+			notification, _ := reader.ReadString('\n')
+			notification = strings.TrimSpace(notification)
+			temp1 = parsedTemplates["notification"]
+			data = map[string]interface{}{
+				"name":         name,
+				"notification": notification,
+			}
+		case "3":
+			fmt.Println("Enter your error message:")
+			errorMessage, _ := reader.ReadString('\n')
+			errorMessage = strings.TrimSpace(errorMessage)
+			temp1 = parsedTemplates["error"]
+			data = map[string]interface{}{
+				"name":  name,
+				"error": errorMessage,
+			}
+
+		case "4":
+			fmt.Println("Exiting....")
+			return
+		default:
+			fmt.Println("Please Enter valid input")
+			return
+		}
+
+		err := temp1.Execute(os.Stdin, data)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+}

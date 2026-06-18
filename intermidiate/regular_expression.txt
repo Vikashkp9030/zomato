@@ -1,0 +1,36 @@
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	re := regexp.MustCompile(`[a-zA-Z0-9._ +%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`)
+
+	email1 := "user@example.com"
+	email2 := "invalid-email"
+
+	fmt.Println("Email1", re.MatchString(email1))
+	fmt.Println("Email2", re.MatchString(email2))
+
+	re = regexp.MustCompile(`(\d){4}-(\d{2})-(\d{2})`)
+
+	date := "2024-06-20"
+	subString := re.FindStringSubmatch(date)
+	fmt.Println(subString)
+	fmt.Println(subString[0])
+	fmt.Println(subString[1])
+	fmt.Println(subString[2])
+	fmt.Println(subString[3])
+
+	re = regexp.MustCompile(`[aeiou]`)
+
+	text1 := "Hello world"
+	fmt.Println(re.ReplaceAllString(text1, "*"))
+
+	re = regexp.MustCompile(`(?i)go`)
+	text := "Go is a great Programming language, i love Go!"
+	fmt.Println(re.FindAllString(text, -1))
+	fmt.Println("Match :", re.MatchString(text))
+}

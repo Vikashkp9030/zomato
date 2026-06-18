@@ -1,0 +1,372 @@
+version: '3.8'
+
+services:
+  # Databases
+  postgres-users:
+    image: postgres:15-alpine
+    container_name: postgres_users
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: users_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_users_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-restaurants:
+    image: postgres:15-alpine
+    container_name: postgres_restaurants
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: restaurants_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_restaurants_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-orders:
+    image: postgres:15-alpine
+    container_name: postgres_orders
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: orders_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_orders_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-payments:
+    image: postgres:15-alpine
+    container_name: postgres_payments
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: payments_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_payments_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-deliveries:
+    image: postgres:15-alpine
+    container_name: postgres_deliveries
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: deliveries_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_deliveries_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-reviews:
+    image: postgres:15-alpine
+    container_name: postgres_reviews
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: reviews_db
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_reviews_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-notifications:
+    image: postgres:15-alpine
+    container_name: postgres_notifications
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: notifications_db
+    ports:
+      - "5438:5432"
+    volumes:
+      - postgres_notifications_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  postgres-admin:
+    image: postgres:15-alpine
+    container_name: postgres_admin
+    environment:
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato_pass
+      POSTGRES_DB: admin_db
+    ports:
+      - "5439:5432"
+    volumes:
+      - postgres_admin_data:/var/lib/postgresql/data
+    networks:
+      - zomato_network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: zomato_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - zomato_network
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: zomato_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - zomato_network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: api-gateway
+    container_name: zomato_api_gateway
+    environment:
+      ENV: development
+      GATEWAY_PORT: 8000
+      USER_SERVICE_URL: http://user-service:8001
+      RESTAURANT_SERVICE_URL: http://restaurant-service:8002
+      ORDER_SERVICE_URL: http://order-service:8003
+      PAYMENT_SERVICE_URL: http://payment-service:8004
+      DELIVERY_SERVICE_URL: http://delivery-service:8005
+      REVIEW_SERVICE_URL: http://review-service:8006
+      NOTIFICATION_SERVICE_URL: http://notification-service:8007
+      ADMIN_SERVICE_URL: http://admin-service:8008
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - zomato_network
+
+  # User Service
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: user-service
+    container_name: zomato_user_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8001
+      DB_HOST: postgres-users
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      REDIS_ADDR: redis:6379
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres-users
+      - redis
+    networks:
+      - zomato_network
+
+  # Restaurant Service
+  restaurant-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: restaurant-service
+    container_name: zomato_restaurant_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8002
+      DB_HOST: postgres-restaurants
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      REDIS_ADDR: redis:6379
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8002:8002"
+    depends_on:
+      - postgres-restaurants
+      - redis
+    networks:
+      - zomato_network
+
+  # Order Service
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: order-service
+    container_name: zomato_order_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8003
+      DB_HOST: postgres-orders
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8003:8003"
+    depends_on:
+      - postgres-orders
+    networks:
+      - zomato_network
+
+  # Payment Service
+  payment-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: payment-service
+    container_name: zomato_payment_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8004
+      DB_HOST: postgres-payments
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8004:8004"
+    depends_on:
+      - postgres-payments
+    networks:
+      - zomato_network
+
+  # Delivery Service
+  delivery-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: delivery-service
+    container_name: zomato_delivery_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8005
+      DB_HOST: postgres-deliveries
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8005:8005"
+    depends_on:
+      - postgres-deliveries
+    networks:
+      - zomato_network
+
+  # Review Service
+  review-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: review-service
+    container_name: zomato_review_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8006
+      DB_HOST: postgres-reviews
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8006:8006"
+    depends_on:
+      - postgres-reviews
+    networks:
+      - zomato_network
+
+  # Notification Service
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: notification-service
+    container_name: zomato_notification_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8007
+      DB_HOST: postgres-notifications
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+    ports:
+      - "8007:8007"
+    depends_on:
+      - postgres-notifications
+      - rabbitmq
+    networks:
+      - zomato_network
+
+  # Admin Service
+  admin-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: admin-service
+    container_name: zomato_admin_service
+    environment:
+      ENV: development
+      SERVICE_PORT: 8008
+      DB_HOST: postgres-admin
+      DB_PORT: 5432
+      DB_USER: zomato
+      DB_PASSWORD: zomato_pass
+      JWT_SECRET: your-secret-key
+    ports:
+      - "8008:8008"
+    depends_on:
+      - postgres-admin
+    networks:
+      - zomato_network
+
+volumes:
+  postgres_users_data:
+  postgres_restaurants_data:
+  postgres_orders_data:
+  postgres_payments_data:
+  postgres_deliveries_data:
+  postgres_reviews_data:
+  postgres_notifications_data:
+  postgres_admin_data:
+  redis_data:
+  rabbitmq_data:
+
+networks:
+  zomato_network:
+    driver: bridge

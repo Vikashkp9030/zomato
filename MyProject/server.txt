@@ -1,0 +1,73 @@
+package main
+
+import (
+	"crypto/tls"
+	"fmt"
+	"net/http"
+
+	"golang.org/x/net/http2"
+)
+
+func main() {
+	http.HandleFunc("/orders", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+		fmt.Fprintf(w, "Handling incoming order")
+	})
+	http.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+		fmt.Fprintf(w, "Handling incoming user request")
+	})
+
+	port := 8080
+	pem := "cert.pem"
+	key := "key.pem"
+
+	tscConfig := &tls.Config{
+		MinVersion: tls.VersionTLS12,
+	}
+
+	server := &http.Server{
+		Addr:      fmt.Sprintf(":%d", port),
+		TLSConfig: tscConfig,
+		Handler:   nil,
+	}
+	http2.ConfigureServer(server, &http2.Server{})
+
+	fmt.Printf("Starting server on port %d\n", port)
+
+	err := server.ListenAndServeTLS(pem, key)
+	if err != nil {
+		fmt.Printf("Failed to start server: %v\n", err)
+		return
+	}
+
+	// http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+
+}
+
+func logRequest(r *http.Request) {
+	httpVersion := r.Proto
+	fmt.Printf("Received request: %s %s %s\n", r.Method, r.URL.Path, httpVersion)
+
+	if r.TLS != nil{
+		tlsVersion := getTLSVersion(r.TLS.Version)
+		fmt.Printf("TLS version: %x\n", tlsVersion)
+	}else{
+		fmt.Printf("No TLS connection\n")
+	}
+}
+
+func getTLSVersion(tlsVersion uint16) string {
+	switch tlsVersion {
+	case tls.VersionTLS10:
+		return "TLS 1.0"
+	case tls.VersionTLS11:
+		return "TLS 1.1"
+	case tls.VersionTLS12:
+		return "TLS 1.2"
+	case tls.VersionTLS13:
+		return "TLS 1.3"
+	default:
+		return fmt.Sprintf("Unknown TLS version: %x", tlsVersion)
+	}
+}

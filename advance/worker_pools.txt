@@ -1,0 +1,68 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// func worker(id int, jobs <-chan int, results chan<- int) {
+// 	for task := range jobs {
+// 		fmt.Printf("worker %d processing task %d\n", id, task)
+// 		time.Sleep(time.Second)
+// 		results <- task * 2
+// 	}
+// }
+
+// func main() {
+// 	numWorkers := 3
+// 	numJobs := 10
+// 	jobs := make(chan int, numJobs)
+// 	results := make(chan int, numJobs)
+
+// 	for w := 1; w <= numWorkers; w++ {
+// 		go worker(w, jobs, results)
+// 	}
+
+// 	for i := 0; i < numJobs; i++ {
+// 		jobs <- i
+// 	}
+// 	close(jobs)
+
+// 	for i := 0; i < numJobs; i++ {
+// 		result := <-results
+// 		fmt.Println("result:", result)
+// 	}
+// }
+
+type ticketRequest struct {
+	personId   int
+	numTickets int
+	cost       int
+}
+
+func ticketSeller(requests <-chan ticketRequest, results chan<- int) {
+	for req := range requests {
+		fmt.Printf("Processing %d tickets(s) of personId %d with total cast %d\n", req.numTickets, req.personId, req.cost)
+		time.Sleep(time.Second)
+		results <- req.personId
+	}
+}
+
+func main() {
+	numberOfSellers := 3
+	price := 5
+	requests := make(chan ticketRequest, 10)
+	tickerResult := make(chan int)
+
+	for range 3 {
+		go ticketSeller(requests, tickerResult)
+	}
+
+	for i := range numberOfSellers {
+		requests <- ticketRequest{personId: i, numTickets: 2 * i, cost: price * (i + 1)}
+	}
+	close(requests)
+	for range requests {
+		fmt.Printf("Ticket for personId %d processed successfully\n", <-tickerResult)
+	}
+}

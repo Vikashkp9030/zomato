@@ -1,0 +1,39 @@
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func checkError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+func main() {
+	// err := os.Mkdir("subdir", 0755)
+	// checkError(err)
+	// checkError(os.Mkdir("subdir1", 0755))
+	// defer os.Remove("subdir1")
+	// os.WriteFile("subdir1/file", []byte(""), 0755)
+	// checkError(os.MkdirAll("subdir/parent/child", 0755))
+	// checkError(os.MkdirAll("subdir/parent/child1", 0755))
+	// checkError(os.MkdirAll("subdir/parent/child2", 0755))
+	// checkError(os.MkdirAll("subdir/parent1/child", 0755))
+	// checkError(os.WriteFile("subdir/parent/child/file", []byte(""), 0755))
+	result, err := os.ReadDir("subdir/parent")
+	checkError(err)
+	for _, entery := range result {
+		fmt.Println(entery.Name(), entery.IsDir(), entery.Type())
+	}
+	checkError(os.Chdir("subdir/parent/child"))
+	result, err = os.ReadDir(".")
+	checkError(err)
+	for _, entery := range result {
+		fmt.Println(entery)
+	}
+	checkError(os.Chdir("../../.."))
+	dir, err := os.Getwd()
+	checkError(err)
+	fmt.Println(dir)
+}

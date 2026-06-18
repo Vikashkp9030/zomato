@@ -1,0 +1,33 @@
+package main
+
+import "fmt"
+
+func main() {
+	result := add(10, 34)
+	fmt.Println(result)
+
+	hayFun := func() {
+		fmt.Println("Hello from an anonymous function!")
+	}
+	hayFun()
+	operation := add
+	fmt.Println(operation(1, 2))
+	multiplier := crateMultiplier
+	fmt.Println(multiplier(5))
+
+	appy1 := applyOperation(2, 5, add)
+	fmt.Println(appy1)
+
+}
+
+func add(x, y int) int {
+	return x + y
+}
+func applyOperation(x, y int, operation func(int, int) int) int {
+	return operation(x, y)
+}
+func crateMultiplier(factor int) func(int) int {
+	return func(x int) int {
+		return x * factor
+	}
+}

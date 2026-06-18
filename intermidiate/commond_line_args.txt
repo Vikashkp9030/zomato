@@ -1,0 +1,49 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"os"
+)
+
+func main() {
+	// fmt.Println("Commond line arguments:", os.Args[0])
+
+	// for i, arg := range os.Args[1:] {
+	// 	fmt.Println("Argument", i, ":", arg)
+	// }
+
+	// // define flag
+	// var name string
+	// var age int
+	// var male bool
+
+	// flag.StringVar(&name, "name", "Vikash", "Name of user")
+	// flag.IntVar(&age, "age", 25, "Age of user")
+	// flag.BoolVar(&male, "male", true, "Gender of user")
+	// flag.Parse()
+	// fmt.Println("Name:", name)
+	// fmt.Println("Age:", age)
+	// fmt.Println("Male:", male)
+
+	subCmd1 := flag.NewFlagSet("firstSub", flag.ExitOnError)
+	subCmd2 := flag.NewFlagSet("secondSub", flag.ExitOnError)
+	firstFlag := subCmd1.Bool("Processing", false, "Comond processing status")
+	secondFlag := subCmd2.Bool("Processing", false, "Comond processing status")
+
+	if len(os.Args) < 2 {
+		fmt.Println("Expected 'firstSub' or 'secondSub' subcommands")
+		os.Exit(1)
+	}
+	switch os.Args[1] {
+	case "firstSub":
+		subCmd1.Parse(os.Args[2:])
+		fmt.Println("First subcommand called with Processing:", *firstFlag)
+	case "secondSub":
+		subCmd2.Parse(os.Args[2:])
+		fmt.Println("Second subcommand called with Processing:", *secondFlag)
+	default:
+		fmt.Println("Expected 'firstSub' or 'secondSub' subcommands")
+		os.Exit(1)
+	}
+}

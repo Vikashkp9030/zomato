@@ -1,0 +1,17 @@
+package main
+
+import "os"
+
+func checkError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func main() {
+	tempFile, err := os.CreateTemp("", "tempFile")
+	checkError(err)
+	defer tempFile.Close()
+	defer os.RemoveAll(tempFile.Name())
+
+}

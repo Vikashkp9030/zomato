@@ -1,0 +1,98 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+type Worker struct {
+	ID   int
+	Task string
+}
+
+func (w *Worker) PerformTask(wg *sync.WaitGroup) {
+	defer wg.Done()
+	fmt.Printf("Worker %d starting task: %s\n", w.ID, w.Task)
+	time.Sleep(2 * time.Second)
+	fmt.Printf("Worker %d finished task: %s\n", w.ID, w.Task)
+}
+
+func main() {
+	var wg sync.WaitGroup
+	tasks := []string{"digging", "watering", "harvesting", "planting", "weeding"}
+
+	for i, task := range tasks {
+		wg.Add(1) // Add once per task
+		go func(id int, t string) {
+			worker := &Worker{ID: id, Task: t}
+			worker.PerformTask(&wg) // Direct call, no extra goroutine
+		}(i+1, task)
+	}
+
+	wg.Wait()
+	fmt.Println("Construction finished")
+}
+
+// func worker(id int, tasks <-chan int, result chan<- int, wg *sync.WaitGroup) {
+// 	defer wg.Done()
+// 	fmt.Printf("Worker %d starting\n", id)
+
+// 	for task := range tasks { // This will exit when tasks channel is closed
+// 		time.Sleep(100 * time.Millisecond) // Simulate work
+// 		result <- task * 2
+// 	}
+
+// 	fmt.Printf("Worker %d finished\n", id)
+// }
+
+// func main() {
+// 	var wg sync.WaitGroup
+// 	numWorkers := 5
+// 	numTasks := 10
+// 	result := make(chan int, numTasks)
+// 	tasks := make(chan int, numTasks)
+
+// 	// Add exactly the number of goroutines you're starting
+// 	wg.Add(numWorkers)
+
+// 	// Start workers
+// 	for i := 1; i <= numWorkers; i++ {
+// 		go worker(i, tasks, result, &wg)
+// 	}
+
+// 	// Send all tasks
+// 	for i := 0; i < numTasks; i++ {
+// 		tasks <- i
+// 	}
+// 	close(tasks) // CRITICAL: This signals workers that no more tasks are coming
+
+// 	// Close result channel when all workers are done
+// 	go func() {
+// 		wg.Wait()
+// 		close(result)
+// 	}()
+
+// 	// Collect all results
+// 	for res := range result {
+// 		fmt.Println("Result:", res)
+// 	}
+// }
+
+// func worker(id int, wg *sync.WaitGroup) {
+// 	defer wg.Done()
+// 	fmt.Printf("Worker %d starting\n", id)
+// 	time.Sleep(time.Second)
+// 	fmt.Printf("Worker %d finished", id)
+// }
+
+// func main() {
+// 	var wg sync.WaitGroup
+// 	numWorkers := 5
+
+// 	wg.Add(numWorkers)
+// 	for i := 1; i <= numWorkers; i++ {
+// 		go worker(i, &wg)
+// 	}
+// 	wg.Wait()
+// }

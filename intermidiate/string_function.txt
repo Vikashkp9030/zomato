@@ -1,0 +1,69 @@
+package main
+
+import (
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	str := "Hello, Go!"
+	fmt.Println(str)
+
+	str1 := "Hello"
+	str2 := "World"
+
+	result := str1 + " " + str2
+	fmt.Println(result)
+
+	upperStr := strings.ToUpper(str)
+	fmt.Println(upperStr)
+
+	lowerStr := strings.ToLower(str)
+	fmt.Println(lowerStr)
+	fmt.Println(str[0])
+	fmt.Println(str[0:5])
+	num := 42
+	str3 := strconv.Itoa(num)
+	fmt.Println(len(str3))
+	fruits := "Apple, Banana, Orange"
+	fruits1 := "Apple-Banana-Orange"
+
+	part1 := strings.Split(fruits, ",")
+	part2 := strings.Split(fruits1, "-")
+
+	fmt.Println(part1)
+	fmt.Println(part2)
+
+	contry := []string{"USA", "India", "China"}
+	contryStr := strings.Join(contry, ", ")
+	fmt.Println(contryStr)
+	fmt.Println(strings.Contains(str, "Go"))
+	replace := strings.Replace(str, "Go", "Golang", 1)
+	fmt.Println(replace)
+	strSpace := "   Hello, world!    "
+	fmt.Println(strSpace)
+	fmt.Println(strings.TrimSpace(strSpace))
+	fmt.Println(strings.ToLower(strSpace))
+	fmt.Println(strings.ToUpper(strSpace))
+	fmt.Println(strings.Count(strSpace, "l"))
+	fmt.Println(strings.HasPrefix(strings.TrimSpace(strSpace), "He"))
+	fmt.Println(strings.HasSuffix(strings.TrimSpace(strSpace), "!"))
+
+	str5 := "Hello, 11Go!"
+	re := regexp.MustCompile(`\d+`)
+	match := re.FindAllString(str5, 1)
+	fmt.Println(match)
+
+	var builder strings.Builder
+	builder.WriteString("Hello, ")
+	builder.WriteString("world!")
+	result = builder.String()
+	fmt.Println(result)
+	builder.Reset()
+	builder.WriteString(" ")
+	builder.WriteString("How are you")
+	fmt.Println(builder.String())
+
+}

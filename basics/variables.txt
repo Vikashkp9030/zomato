@@ -1,0 +1,14 @@
+package variable
+
+import "fmt"
+
+func mainVar() {
+
+	var age int
+	name := "Vikash"
+	count := 10
+	lastName := "Patel"
+
+	// use default value
+	fmt.Println(age, name, count, lastName)
+}

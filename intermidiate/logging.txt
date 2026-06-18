@@ -1,0 +1,32 @@
+package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	log.Println("This is a log message")
+	log.Printf("This is a formatted log message: %s", "Hello, World!")
+	log.SetPrefix("INFO: ")
+	log.Println("This is another log message")
+	infoLogger.Println("this is enfo message")
+	errorLogger.Println("this is error message")
+	warnLogger.Println("this is warn message")
+
+	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer logFile.Close()
+
+	infoLogger.SetOutput(logFile)
+	errorLogger.SetOutput(logFile)
+	warnLogger.SetOutput(logFile)
+}
+
+var (
+	infoLogger  = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	errorLogger = log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	warnLogger  = log.New(os.Stdout, "WARN: ", log.Ldate|log.Ltime|log.Lshortfile)
+)

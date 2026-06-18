@@ -1,0 +1,485 @@
+{
+  "info": {
+    "name": "School Management API",
+    "description": "Complete REST API collection for School Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teacher@example.com\",\n  \"password\": \"password123\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"role\": \"teacher\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teacher@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": ["{{base_url}}"],
+              "path": ["profile"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"old_password\": \"password123\",\n  \"new_password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/change-password",
+              "host": ["{{base_url}}"],
+              "path": ["change-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Students",
+      "item": [
+        {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Arjun\",\n  \"last_name\": \"Singh\",\n  \"email\": \"arjun@example.com\",\n  \"phone\": \"9876543210\",\n  \"date_of_birth\": \"2008-05-15T00:00:00Z\",\n  \"gender\": \"Male\",\n  \"class_id\": 1,\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/students",
+              "host": ["{{base_url}}"],
+              "path": ["students"]
+            }
+          }
+        },
+        {
+          "name": "List Students",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/students?limit=10&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["students"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Student by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/students/1",
+              "host": ["{{base_url}}"],
+              "path": ["students", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Arjun\",\n  \"last_name\": \"Singh\",\n  \"email\": \"arjun.new@example.com\",\n  \"phone\": \"9876543211\",\n  \"gender\": \"Male\",\n  \"class_id\": 2,\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/students/1",
+              "host": ["{{base_url}}"],
+              "path": ["students", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/students/1",
+              "host": ["{{base_url}}"],
+              "path": ["students", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Student Performance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/students/1/performance",
+              "host": ["{{base_url}}"],
+              "path": ["students", "1", "performance"]
+            }
+          }
+        },
+        {
+          "name": "Get Students by Class",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/classes/1/students",
+              "host": ["{{base_url}}"],
+              "path": ["classes", "1", "students"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exams",
+      "item": [
+        {
+          "name": "Create Exam",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"exam_name\": \"Mid Term - Mathematics\",\n  \"exam_type\": \"Mid Term\",\n  \"exam_date\": \"2024-07-15T00:00:00Z\",\n  \"exam_time\": \"09:00:00\",\n  \"total_marks\": 100,\n  \"passing_marks\": 40,\n  \"subject_id\": 1,\n  \"class_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exams",
+              "host": ["{{base_url}}"],
+              "path": ["exams"]
+            }
+          }
+        },
+        {
+          "name": "List Exams",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exams?limit=10&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["exams"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Exam by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exams/1",
+              "host": ["{{base_url}}"],
+              "path": ["exams", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Upcoming Exams",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exams/upcoming",
+              "host": ["{{base_url}}"],
+              "path": ["exams", "upcoming"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance",
+      "item": [
+        {
+          "name": "Record Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": 1,\n  \"class_id\": 1,\n  \"attendance_date\": \"2024-06-16T00:00:00Z\",\n  \"status\": \"Present\",\n  \"remarks\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/attendance",
+              "host": ["{{base_url}}"],
+              "path": ["attendance"]
+            }
+          }
+        },
+        {
+          "name": "Get Student Attendance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/students/1/attendance?start_date=2024-01-01&end_date=2024-02-01",
+              "host": ["{{base_url}}"],
+              "path": ["students", "1", "attendance"],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2024-02-01"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/students/1/attendance/summary",
+              "host": ["{{base_url}}"],
+              "path": ["students", "1", "attendance", "summary"]
+            }
+          }
+        },
+        {
+          "name": "Get Class Attendance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/classes/1/attendance?date=2024-06-16",
+              "host": ["{{base_url}}"],
+              "path": ["classes", "1", "attendance"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-06-16"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

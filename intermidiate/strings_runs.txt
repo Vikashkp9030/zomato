@@ -1,0 +1,14 @@
+package main
+
+import "fmt"
+
+func main() {
+	message := "Hello, world!"
+	rawMessage := `Hello\n go`
+	fmt.Println(rawMessage)
+	fmt.Println(message)
+
+	for _, char := range message {
+		fmt.Printf("%c\n", char)
+	}
+}

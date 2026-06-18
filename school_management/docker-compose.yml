@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: school_management_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: school_management
+      MYSQL_USER: school_user
+      MYSQL_PASSWORD: school_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./migrations:/docker-entrypoint-initdb.d
+    networks:
+      - school_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  api:
+    build: .
+    container_name: school_management_api
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: school_user
+      DB_PASSWORD: school_password
+      DB_NAME: school_management
+      SERVER_PORT: 8080
+      JWT_SECRET: your_super_secret_jwt_key_change_in_production
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - school_network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  school_network:
+    driver: bridge

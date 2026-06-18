@@ -1,0 +1,37 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	fmt.Println(time.Now())
+	specificTime := time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)
+	fmt.Println(specificTime)
+
+	parsedTime, _ := time.Parse("2006-01-02", "2020-05-01")
+
+	parsedTime1, _ := time.Parse("06-01-02", "20-05-01")
+	parsedTime2, _ := time.Parse("06-1-2", "20-5-1")
+
+	parsedTime3, _ := time.Parse("06-1-2 15-04", "20-5-1 14-30")
+
+	fmt.Println(parsedTime)
+	fmt.Println(parsedTime1)
+	fmt.Println(parsedTime2)
+	fmt.Println(parsedTime3)
+
+	t := time.Now()
+	fmt.Println("Formatted time:", t.Format("Monday 06-01-02 15-04-5"))
+
+	oneDayLater := t.Add(time.Hour * 24)
+	fmt.Println("One day later:", oneDayLater)
+	fmt.Println(oneDayLater.Weekday())
+
+	loc, _ := time.LoadLocation("Asia/Kolkata")
+
+	t = time.Date(2024, time.July, 8, 14, 16, 40, 00, time.UTC)
+	tLocal := t.In(loc)
+	fmt.Println("Local time:", tLocal)
+}

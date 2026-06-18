@@ -1,0 +1,40 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func main() {
+	// for i:=0; i<10; i++{
+	//   fmt.Println(i)
+	// }
+
+	// numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	// for index, value := range numbers {
+	// 	fmt.Println("Index:", index, "Value:", value)
+
+	// }
+	source := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(source)
+	target := random.Intn(100) + 1
+
+	fmt.Println("Welome to the Gessing Game!")
+	fmt.Println("I have selected a random number between 1 and 100. Can you guess it?")
+	fmt.Println("Can you guess what is it?")
+	var guess int
+	for {
+		fmt.Println("Enter your guess: ")
+		fmt.Scanln(&guess)
+		if guess == target {
+			fmt.Println("Congratulations!, you guess the correct number!")
+			break
+		} else if guess < target {
+			fmt.Println("Too low! Try again.")
+		} else {
+			fmt.Println("Too high! Try again.")
+		}
+	}
+
+}

@@ -1,0 +1,46 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func logRunningOperation() {
+	for i := range 20 {
+		fmt.Println(i)
+		time.Sleep(time.Second)
+	}
+}
+
+func main() {
+	timeOut := time.After(2 * time.Second)
+	done := make(chan bool)
+
+	go func() {
+		logRunningOperation()
+		done <- true
+	}()
+
+	select {
+	case <-timeOut:
+		fmt.Println("Operation time out")
+	case <-done:
+		fmt.Println("Operation is done")
+	}
+}
+
+// func main() {
+// 	fmt.Println("App is running")
+// 	timmer := time.NewTimer(2 * time.Second)
+
+// 	fmt.Println("Wait for timmer.c")
+// 	stoped := timmer.Stop()
+
+// 	if stoped {
+// 		fmt.Println("Timer was stopped")
+// 	}
+// 	timmer.Reset(time.Second)
+// 	<-timmer.C
+// 	fmt.Println("Timmer Expire")
+
+// }

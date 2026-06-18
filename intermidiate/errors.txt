@@ -1,0 +1,29 @@
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+func sqrt(x float64) (float64, error) {
+	if x < 0 {
+		return 0, errors.New("Math Error: square root of negative number")
+	}
+	return 1, nil
+}
+
+func main() {
+	result, error := sqrt(16)
+	if error != nil {
+		fmt.Println(error)
+	} else {
+		fmt.Println(result)
+	}
+
+	result, error = sqrt(-16)
+	if error != nil {
+		fmt.Println(error)
+	} else {
+		fmt.Println(result)
+	}
+}

@@ -1,0 +1,260 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-06-09T00:00:00.000Z",
+  "__export_source": "insomnia.desktop",
+  "resources": [
+    {
+      "_id": "wrk_1",
+      "parentId": null,
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "name": "TODO API",
+      "description": "TODO API Collection for Gin-based application",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_1",
+      "parentId": "wrk_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "name": "Development",
+      "description": "Local development environment",
+      "data": {
+        "base_url": "http://localhost:8080"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url"
+        ]
+      },
+      "color": null,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_1",
+      "parentId": "wrk_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "name": "TODO Endpoints",
+      "description": null,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_health",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/health",
+      "name": "Health Check",
+      "description": "Check if the API is running",
+      "method": "GET",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1000000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos",
+      "name": "Create Todo",
+      "description": "Create a new todo item",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Buy groceries\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -900000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_all",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos",
+      "name": "Get All Todos",
+      "description": "Retrieve all todo items",
+      "method": "GET",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -800000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_by_id",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos/1",
+      "name": "Get Todo by ID",
+      "description": "Get a specific todo by ID",
+      "method": "GET",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -700000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos/1",
+      "name": "Update Todo",
+      "description": "Update an existing todo item",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Buy groceries and milk\",\n  \"completed\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -600000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_complete",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos/1",
+      "name": "Mark Todo as Complete",
+      "description": "Mark a todo as completed",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"completed\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -550000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_incomplete",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos/1",
+      "name": "Mark Todo as Incomplete",
+      "description": "Mark a todo as incomplete",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"completed\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -500000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos/1",
+      "name": "Delete Todo",
+      "description": "Delete a specific todo item",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -400000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_all",
+      "parentId": "fld_1",
+      "modified": 1718000000000,
+      "created": 1718000000000,
+      "url": "{{ base_url }}/api/todos",
+      "name": "Delete All Todos",
+      "description": "Delete all todo items",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -300000000,
+      "_type": "request"
+    }
+  ]
+}

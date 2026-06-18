@@ -1,0 +1,62 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type Person struct {
+	FirstName    string  `json:"name"`
+	Age          int     `json:"age"`
+	EmailAddress string  `json:"email"`
+	Address      Address `json:"address"`
+}
+type Address struct {
+	State string `json:"street"`
+	City  string `json:"city"`
+}
+
+func main() {
+	person := Person{
+		FirstName:    "Vikash",
+		Age:          27,
+		EmailAddress: "vikash@example.com",
+		Address: Address{
+			State: "California",
+			City:  "Los Angeles",
+		},
+	}
+	jsonData, err := json.Marshal(person)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(jsonData))
+	jsonData1 := `{"full_name":"Vikash","age":27,"email":"vikash@example.com","address":{"street":"123 Main St","city":"Los Angeles"}}`
+	var employee Employee
+	err = json.Unmarshal([]byte(jsonData1), &employee)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(employee.Address.State)
+	fmt.Println(employee.Address.City)
+	fmt.Println(employee.Name)
+	fmt.Println(employee.Age)
+	fmt.Println(employee.Email)
+
+	listOfAddress := []Address{
+		{State: "California", City: "Los Angeles"},
+		{State: "New York", City: "New York"},
+	}
+	jsonData2, err := json.Marshal(listOfAddress)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(jsonData2))
+}
+
+type Employee struct {
+	Name    string  `json:"full_name"`
+	Age     int     `json:"age"`
+	Email   string  `json:"email"`
+	Address Address `json:"address"`
+}
